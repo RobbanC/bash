@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # The usage of the script is for assigment 1 in virtual and sets static IP-adresses to the assigned networkcards
+<<<<<<< HEAD
+=======
+#the output file are located @ /etc/netplan/netplanconf, make sure to do a backup of the olf file before
+>>>>>>> f4b2df2bc7f9beaec73d079de30500267f53e947
 
 IP1=192.168.0.10/24
 IP2=192.168.1.10/24
@@ -11,9 +15,19 @@ echo "network:
     ethernets:
         ens160:
             dhcp4: yes
+<<<<<<< HEAD
 		ens192:
 			dhcp4: no
 			addresses: [$IP1]
 		ens224:
 			dhcp: no
 			addresses: [$IP2]" >> netplanconf
+=======
+	ens192:
+	    dhcp4: no
+	    addresses: [$IP1]
+	ens224:
+	    dhcp: no
+	    addresses: [$IP2]" 
+>> /etc/netplan/netplanconf
+>>>>>>> f4b2df2bc7f9beaec73d079de30500267f53e947
