@@ -2,14 +2,18 @@
 #This bash-script is made for a particular assigment where you install and configure zfs and share it like nfs.
 #this commands needs to be in root (sudo -i)
  
-
+#install required packages for the assigment
 apt update -y
 apt install -y zfsutils-linux 
 apt install -y nfs-kernel-server
 apt install -y targetcli-fb
-
+#makes a copy of old config file
+cp /etc/netplan/01-netcfg.yaml /etc/netplan/01-netcfg.yaml.bak
 #running script for setting static IP-addresses on ens192,ens224 check netplanscript
 sh ./netplanscript
+ifconfig -a
+sleep 5
+#making directory for txt files that are captured during the script
 mkdir /etc/notes
 zpool list
 lsblk
@@ -22,12 +26,16 @@ zpool list -v
 zfs create tank/temp
 zfs list >> /etc/notes/homevstemp.txt
 cd /tank/temp
-dd if=/dev/zero of=101mb-file bs=1000000 count=105
+dd if=/dev/zero of=100mb-file bs=1000000 count=105
+echo "100MB FILE CREATED"
+sleep 2
 cd /
 zfs get all tank/temp
 zfs set refquota=500M tank/temp
-zfs list >> quota.txt
+zfs list >> /etc/notes/quota.txt
 zfs snapshot tank/temp@first
+echo "SNAPSHOT TAKEN"
+sleep 2
 zfs list -t snapshot
 zfs set snapdir=visible tank/temp
 ls -al /tank/temp/.zfs
@@ -37,18 +45,22 @@ ls -al /tank/temp/
 zfs rollback tank/temp@first
 zfs destroy -r tank/home
 zfs destroy -r tank/temp
-echo "filesystem destroyed"
 zpool destroy tank
-echo "pool destroyed"
+echo "FILESYSTEM & POOLS ARE DESTROYED"
+sleep 2
 zpool create -f exports raidz /dev/sdb /dev/sdc /dev/sdd /dev/sde
 zfs create exports/nfs
+echo "RAIDZ1 & FILESYSTEM CREATED"
+sleep 1
 cd /etc
 #vim $(find -name exports)
 exec 3<> exports
 echo "/exports/nfs	*(rw,no_root_squash,async)"
 exec 3>&- 
 mount -t nfs 10.206.19.*:/exports/nfs /mnt
+echo "ROWS CREATED IN /ETC/EXPORTS & DISK MOUNTED"
 lsblk
+sleep 2
 df -h >> /etc/notes/mounted.txt
 useradd -m -u 1010 alice
 touch /exports/nfs/alice_file
