@@ -1,9 +1,10 @@
 #!/bin/bash
-sudo -i
+#install all relevant packages
 apt update -y
 apt install -y zfsutils-linux 
 apt install -y nfs-kernel-server
 apt install -y targetcli-fb
+
 zpool list
 lsblk
 zpool create tank mirror /dev/sdb /dev/sdc
