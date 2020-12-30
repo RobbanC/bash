@@ -1,0 +1,45 @@
+#!/bin/bash
+sudo -i
+apt update -y
+apt install -y zfsutils-linux 
+apt install -y nfs-kernel-server
+apt install -y targetcli-fb
+zpool list
+lsblk
+zpool create tank mirror /dev/sdb /dev/sdc
+zfs list
+zfs create tank/home
+fdisk -l >> answer.txt
+zpool add tank mirror /dev/sdd /dev/sde
+zpool list -v 
+zfs create tank/temp
+zfs list >> homevstemp.txt
+cd /tank/temp
+dd if=/dev/zero of=101mb-file bs=1000000 count=105
+cd /
+zfs get all tank/temp
+zfs set refquota=500M tank/temp
+zfs list >> quota.txt
+zfs snapshot tank/temp@first
+zfs list -t snapshot
+zfs set snapdir=visible tank/temp
+ls -al /tank/temp/.zfs
+rm -rf /tank/temp/*
+zfs list -t snapshot >> snapshot.txt
+ls -al /tank/temp/
+zfs rollback tank/temp@first
+zfs destroy -r tank/home
+zfs destroy -r tank/temp
+echo "filesystem destroyed"
+zpool destroy tank
+echo "pool destroyed"
+zpool create -f exports raidz /dev/sdb /dev/sdc /dev/sdd /dev/sde
+zfs create exports/nfs
+cd /etc
+#vim $(find -name exports)
+exec 3<> exports
+echo "/exports/nfs	*(rw,no_root_squash,async)"
+exec 3>&- 
+ 
+
+   
