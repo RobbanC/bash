@@ -49,8 +49,6 @@ df -h >> mounted.txt
 useradd -m -u 1010 alice
 touch /exports/nfs/alice_file
 chown alice:alice /exports/nfs/alice_file
-
-
 zfs set refquota=100M exports/nfs 
 zfs create -V 1G exports/blockvolume
 zfs list >> block.txt
