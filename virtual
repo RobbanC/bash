@@ -52,11 +52,9 @@ zpool create -f exports raidz /dev/sdb /dev/sdc /dev/sdd /dev/sde
 zfs create exports/nfs
 echo "RAIDZ1 & FILESYSTEM CREATED"
 sleep 1
-cd /etc
+
 #vim $(find -name exports)
-exec 3<> exports
-echo "/exports/nfs	*(rw,no_root_squash,async)"
-exec 3>&- 
+echo "/exports/nfs      *(rw,no_root_squash,async)" >> /etc/exports 
 mount -t nfs 10.206.19.*:/exports/nfs /mnt
 echo "ROWS CREATED IN /ETC/EXPORTS & DISK MOUNTED"
 lsblk
