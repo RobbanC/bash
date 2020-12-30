@@ -16,5 +16,4 @@ echo "network:
 	        addresses: [$IP1]
 	    ens224:
 	        dhcp: no
-	        addresses: [$IP2]" 
->> /etc/netplan/netplanconf
+	        addresses: [$IP2]" >> /etc/netplan/netplanconf
