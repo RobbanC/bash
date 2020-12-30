@@ -51,4 +51,12 @@ touch /exports/nfs/alice_file
 chown alice:alice /exports/nfs/alice_file
 
 
-   
+zfs set refquota=100M exports/nfs 
+zfs create -V 1G exports/blockvolume
+zfs list >> block.txt
+zfs snapshot exports/blockvolume@first
+#number 27 in assignment pdf
+targetcli
+cd
+
+  
