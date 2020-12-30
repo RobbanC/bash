@@ -7,16 +7,20 @@ apt update -y
 apt install -y zfsutils-linux 
 apt install -y nfs-kernel-server
 apt install -y targetcli-fb
+
+#running script for setting static IP-addresses on ens192,ens224 check netplanscript
+sh ./netplanscript
+mkdir /etc/notes
 zpool list
 lsblk
 zpool create tank mirror /dev/sdb /dev/sdc
 zfs list
 zfs create tank/home
-fdisk -l >> answer.txt
+fdisk -l >> /etc/notes/tempanswer.txt
 zpool add tank mirror /dev/sdd /dev/sde
 zpool list -v 
 zfs create tank/temp
-zfs list >> homevstemp.txt
+zfs list >> /etc/notes/homevstemp.txt
 cd /tank/temp
 dd if=/dev/zero of=101mb-file bs=1000000 count=105
 cd /
@@ -28,7 +32,7 @@ zfs list -t snapshot
 zfs set snapdir=visible tank/temp
 ls -al /tank/temp/.zfs
 rm -rf /tank/temp/*
-zfs list -t snapshot >> snapshot.txt
+zfs list -t snapshot >> /etc/notes/snapshot.txt
 ls -al /tank/temp/
 zfs rollback tank/temp@first
 zfs destroy -r tank/home
@@ -45,16 +49,10 @@ echo "/exports/nfs	*(rw,no_root_squash,async)"
 exec 3>&- 
 mount -t nfs 10.206.19.*:/exports/nfs /mnt
 lsblk
-df -h >> mounted.txt
+df -h >> /etc/notes/mounted.txt
 useradd -m -u 1010 alice
 touch /exports/nfs/alice_file
 chown alice:alice /exports/nfs/alice_file
-zfs set refquota=100M exports/nfs 
-zfs create -V 1G exports/blockvolume
-zfs list >> block.txt
-zfs snapshot exports/blockvolume@first
-#number 27 in assignment pdf
-targetcli
-cd
 
-  
+
+   
