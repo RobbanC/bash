@@ -53,6 +53,6 @@ df -h >> /etc/notes/mounted.txt
 useradd -m -u 1010 alice
 touch /exports/nfs/alice_file
 chown alice:alice /exports/nfs/alice_file
-
+echo "TASK 1-27 ARE FINISH"
 
    
