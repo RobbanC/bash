@@ -1,10 +1,12 @@
 #!/bin/bash
-#install all relevant packages
+#This bash-script is made for a particular assigment where you install and configure zfs and share it like nfs.
+#this commands needs to be in root (sudo -i)
+ 
+
 apt update -y
 apt install -y zfsutils-linux 
 apt install -y nfs-kernel-server
 apt install -y targetcli-fb
-
 zpool list
 lsblk
 zpool create tank mirror /dev/sdb /dev/sdc
@@ -41,6 +43,12 @@ cd /etc
 exec 3<> exports
 echo "/exports/nfs	*(rw,no_root_squash,async)"
 exec 3>&- 
- 
+mount -t nfs 10.206.19.*:/exports/nfs /mnt
+lsblk
+df -h >> mounted.txt
+useradd -m -u 1010 alice
+touch /exports/nfs/alice_file
+chown alice:alice /exports/nfs/alice_file
+
 
    
