@@ -1,6 +1,7 @@
 #!/bin/bash
 #This bash-script is made for a particular assigment where you install and configure zfs and share it like nfs.
 #this commands needs to be in root (sudo -i)
+# using sleep as a debug tool, you can remove it of you want
  
 #install required packages for the assigment
 apt update -y
@@ -11,6 +12,7 @@ apt install -y targetcli-fb
 cp /etc/netplan/01-netcfg.yaml /etc/netplan/01-netcfg.yaml.bak
 #running script for setting static IP-addresses on ens192,ens224 check netplanscript
 sh ./netplanscript
+netplan apply
 ifconfig -a
 sleep 5
 #making directory for txt files that are captured during the script
@@ -63,6 +65,11 @@ df -h >> /etc/notes/mounted.txt
 useradd -m -u 1010 alice
 touch /exports/nfs/alice_file
 chown alice:alice /exports/nfs/alice_file
-echo "TASK 1-27 ARE FINISH"
+echo "TASK 1-26 ARE FINISH"
 
-   
+#configure local disk as iscsi and export to remote system
+#task 27
+
+targetcli
+cd
+create
